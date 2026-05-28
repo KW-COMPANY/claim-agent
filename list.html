@@ -28,11 +28,36 @@
           <option value="draft">下書きのみ</option>
           <option value="knowledge">確定ナレッジのみ</option>
         </select>
-        <select id="fCategory">
-          <option value="">全カテゴリ</option>
-          <option>製品品質</option><option>納期</option>
-          <option>価格</option><option>担当者対応</option>
-          <option>契約条件</option><option>サポート</option><option>その他</option>
+        <select id="fClaimCategory">
+          <option value="">全クレーム種別</option>
+          <option>商品・サービス品質</option>
+          <option>対応遅延・連絡不通</option>
+          <option>効果未達</option>
+          <option>費用対効果</option>
+          <option>契約・請求</option>
+          <option>報告・透明性</option>
+          <option>担当者の質</option>
+          <option>その他</option>
+        </select>
+        <select id="fProduct">
+          <option value="">全商材</option>
+          <option>広告</option>
+          <option>SEO</option>
+          <option>MEO</option>
+          <option>SNS</option>
+          <option>保守</option>
+          <option>その他</option>
+        </select>
+        <select id="fAdoptedType">
+          <option value="">全対応型</option>
+          <option>即時謝罪型</option>
+          <option>原因説明型</option>
+          <option>改善プラン提示型</option>
+          <option>施策修正提案型</option>
+          <option>追加サービス提案型</option>
+          <option>契約条件見直し型</option>
+          <option>エスカレーション型</option>
+          <option>カスタム</option>
         </select>
         <select id="fSeverity">
           <option value="">全重要度</option>
@@ -46,7 +71,6 @@
         <button id="loadBtn" class="primary">読み込み</button>
       </div>
     </section>
-
     <section id="listArea"></section>
   </main>
 
