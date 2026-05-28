@@ -2,45 +2,39 @@
 body {
   margin: 0;
   font-family: -apple-system, "Helvetica Neue", "Hiragino Sans", sans-serif;
-  background: #f4f6fb;
-  color: #1f2937;
-  line-height: 1.6;
+  background: #f4f6fb; color: #1f2937; line-height: 1.6;
 }
 .topbar {
-  background: #1f2a44;
-  color: #fff;
+  background: #1f2a44; color: #fff;
   padding: 12px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
 }
 .topbar h1 { margin: 0; font-size: 18px; flex: 1; }
 .topbar nav a {
-  color: #cdd5e0;
-  text-decoration: none;
-  margin-right: 12px;
-  font-size: 14px;
+  color: #cdd5e0; text-decoration: none;
+  margin-right: 12px; font-size: 14px;
 }
 .topbar nav a.active, .topbar nav a:hover { color: #fff; }
 .token-area { display: flex; gap: 6px; }
 .token-area input {
-  padding: 6px 10px; border: 0; border-radius: 6px;
-  font-size: 13px;
+  padding: 6px 10px; border: 0; border-radius: 6px; font-size: 13px;
 }
 .container { max-width: 980px; margin: 24px auto; padding: 0 16px; }
 .card {
   background: #fff; border-radius: 12px; padding: 24px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.06);
-  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.06); margin-bottom: 16px;
 }
+.notice {
+  background: #fff8e1; border-left: 4px solid #f59e0b;
+}
+.notice strong { color: #b45309; }
+.notice ul { margin: 8px 0 0 20px; }
 h2, h3 { margin-top: 0; }
 label { display: block; margin-bottom: 14px; font-weight: 600; font-size: 14px; }
 input, textarea, select {
   width: 100%; padding: 10px;
   border: 1px solid #cbd5e1; border-radius: 8px;
-  font-size: 14px; margin-top: 6px;
-  font-family: inherit;
+  font-size: 14px; margin-top: 6px; font-family: inherit;
 }
 button {
   background: #475569; color: #fff; border: 0;
@@ -48,13 +42,11 @@ button {
   font-size: 14px; cursor: pointer;
 }
 button.primary { background: #4f46e5; }
-button.primary:hover { background: #4338ca; }
+button.primary:hover:not(:disabled) { background: #4338ca; }
 button:disabled { opacity: .5; cursor: not-allowed; }
 .required { color: #d33; font-size: 12px; font-weight: 400; }
 .hidden { display: none; }
-.grid2 {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-}
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
 .tag {
   display: inline-block; padding: 2px 10px; border-radius: 999px;
@@ -63,11 +55,19 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .tag.高, .tag.緊急, .tag.強い不満 { background: #fde2e2; color: #c00; }
 .tag.中, .tag.通常, .tag.不満 { background: #fff3cd; color: #8a6d00; }
 .tag.低, .tag.中立, .tag.要望 { background: #e2f3e2; color: #2a7; }
+.tag-claim { background: #e0e7ff; color: #3730a3; font-weight: 600; }
+.tag-type { background: #fce7f3; color: #9d174d; font-weight: 600; }
+.pii-warn {
+  background: #fee2e2; color: #991b1b;
+  border-left: 4px solid #dc2626;
+  padding: 10px 14px; border-radius: 6px; margin: 8px 0; font-size: 13px;
+}
+.pii-warn ul { margin: 4px 0 0 18px; }
 .proposal {
   border: 1px solid #e2e8f0; border-radius: 10px;
   padding: 14px; margin-bottom: 10px; background: #fafbff;
 }
-.proposal h4 { margin: 0 0 8px; color: #4f46e5; }
+.proposal h4 { margin: 0 0 8px; display: flex; align-items: center; gap: 8px; }
 .proposal .pc {
   display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
   font-size: 13px; margin-top: 6px;
@@ -76,8 +76,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .proposal .pros { background: #e8f5e8; }
 .proposal .cons { background: #fdecec; }
 .copy-btn {
-  background: #94a3b8; padding: 4px 10px; font-size: 12px;
-  margin-left: 8px;
+  background: #94a3b8; padding: 4px 10px; font-size: 12px; margin-left: 8px;
 }
 .filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .filters input, .filters select { width: auto; flex: 1 1 140px; }
@@ -89,7 +88,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .bar {
   height: 18px; background: #4f46e5; color: #fff;
   font-size: 12px; padding: 0 6px; border-radius: 4px;
-  margin: 2px 0; white-space: nowrap;
+  margin: 2px 0; white-space: nowrap; min-width: 24px;
 }
 .bar-row { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-.bar-row .label { width: 100px; }
+.bar-row .label { width: 130px; }
