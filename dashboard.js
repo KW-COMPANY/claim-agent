@@ -1,4 +1,3 @@
-// File: dashboard.js
 const API_BASE = "https://claim-agent.gmo-k-watanabe.workers.dev";
 
 const tokenInput = document.getElementById("token");
@@ -16,11 +15,15 @@ document.getElementById("loadBtn").addEventListener("click", async () => {
   if (!res.ok) return alert("読み込み失敗");
   const d = await res.json();
   document.getElementById("total").textContent = d.total;
-  document.getElementById("byCategory").innerHTML = bars(d.byCategory);
-  document.getElementById("bySeverity").innerHTML = bars(d.bySeverity);
-  document.getElementById("byUrgency").innerHTML = bars(d.byUrgency);
-  document.getElementById("bySentiment").innerHTML = bars(d.bySentiment);
-  document.getElementById("monthly").innerHTML = bars(d.monthly);
+
+  const ids = [
+    "byClaimCategory", "byProductCategory", "byAdoptedType",
+    "bySeverity", "byUrgency", "bySentiment", "byValueTier", "byChurnRisk",
+    "byTenure", "byClaimCount", "byCurrentAmount", "byTotalAmount", "monthly",
+  ];
+  ids.forEach((id) => {
+    document.getElementById(id).innerHTML = bars(d[id]);
+  });
 
   const kw = Object.entries(d.keywords || {})
     .sort((a, b) => b[1] - a[1])
@@ -35,14 +38,11 @@ function bars(obj) {
   const max = Math.max(...entries.map(([, v]) => v));
   return entries
     .sort((a, b) => b[1] - a[1])
-    .map(
-      ([k, v]) => `
-    <div class="bar-row">
-      <span class="label">${esc(k)}</span>
-      <div class="bar" style="width:${(v / max) * 70}%">${v}</div>
-    </div>`
-    )
-    .join("");
+    .map(([k, v]) => `
+      <div class="bar-row">
+        <span class="label">${esc(k)}</span>
+        <div class="bar" style="width:${(v / max) * 70}%">${v}</div>
+      </div>`).join("");
 }
 
 function esc(s) {
