@@ -1,4 +1,4 @@
-const API_BASE = "https://claim-agent.gmo-k-watanabe.workers.dev";
+const API_BASE = "https://feedback-agent.<あなたのサブドメイン>.workers.dev";
 
 const tokenInput = document.getElementById("token");
 tokenInput.value = localStorage.getItem("accessToken") || "";
@@ -11,7 +11,7 @@ const getToken = () => tokenInput.value || localStorage.getItem("accessToken") |
 let cache = [];
 
 document.getElementById("loadBtn").addEventListener("click", load);
-["fCategory", "fSeverity", "fUrgency", "fKeyword"].forEach((id) =>
+["fClaimCategory", "fProduct", "fAdoptedType", "fSeverity", "fUrgency", "fKeyword"].forEach((id) =>
   document.getElementById(id).addEventListener("input", render)
 );
 
@@ -27,21 +27,22 @@ async function load() {
 }
 
 function render() {
-  const fc = document.getElementById("fCategory").value;
+  const fcc = document.getElementById("fClaimCategory").value;
+  const fp = document.getElementById("fProduct").value;
+  const fa = document.getElementById("fAdoptedType").value;
   const fs = document.getElementById("fSeverity").value;
   const fu = document.getElementById("fUrgency").value;
   const fk = document.getElementById("fKeyword").value.trim().toLowerCase();
 
   const items = cache.filter((i) => {
     const a = i.analysis || {};
-    if (fc && a.category !== fc) return false;
+    if (fcc && a.claim_category !== fcc) return false;
+    if (fp && i.productCategory !== fp) return false;
+    if (fa && i.adoptedLabel !== fa) return false;
     if (fs && a.severity !== fs) return false;
     if (fu && a.urgency !== fu) return false;
     if (fk) {
-      const blob = [
-        i.text, i.customer, i.deal, a.summary,
-        (a.keywords || []).join(" "), i.finalReply,
-      ].join(" ").toLowerCase();
+      const blob = [i.text, a.summary, (a.keywords || []).join(" "), i.finalReply].join(" ").toLowerCase();
       if (!blob.includes(fk)) return false;
     }
     return true;
@@ -59,10 +60,7 @@ function render() {
       const kind = e.target.dataset.kind;
       await fetch(`${API_BASE}/api/delete`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Access-Token": getToken(),
-        },
+        headers: { "Content-Type": "application/json", "X-Access-Token": getToken() },
         body: JSON.stringify({ id, kind }),
       });
       load();
@@ -79,20 +77,29 @@ function renderItem(i) {
         <span class="tag">${isK ? "ナレッジ" : "下書き"}</span>
       </h3>
       <p>
-        <span class="tag">${esc(a.category)}</span>
+        <span class="tag tag-claim">${esc(a.claim_category)}</span>
         <span class="tag ${a.severity}">重要度:${a.severity}</span>
         <span class="tag ${a.urgency}">緊急度:${a.urgency}</span>
         <span class="tag ${a.sentiment}">${esc(a.sentiment || "")}</span>
+        <span class="tag ${a.churn_risk}">解約R:${a.churn_risk || ""}</span>
+        ${isK ? `<span class="tag tag-type">採用:${esc(i.adoptedLabel || "")}</span>` : ""}
       </p>
-      <p><strong>顧客:</strong> ${esc(i.customer || "-")} / 
-         <strong>案件:</strong> ${esc(i.deal || "-")} / 
-         <strong>担当:</strong> ${esc(i.operator || "-")}</p>
+      <p>
+        <small>
+          商材: ${esc(i.productCategory || "-")} / 
+          取引: ${esc(i.tenure || "-")} / 
+          クレーム回数: ${esc(i.claimCount || "-")} / 
+          現契約: ${esc(i.currentAmount || "-")} / 
+          累計: ${esc(i.totalAmount || "-")} / 
+          チャネル: ${esc(i.channel || "-")}
+        </small>
+      </p>
       <details>
-        <summary>顧客発言</summary>
+        <summary>顧客発言（匿名）</summary>
         <p>${esc(i.text)}</p>
       </details>
       ${isK
-        ? `<details open><summary>採用された対応文（${esc(i.adoptedLabel || "")}）</summary>
+        ? `<details open><summary>採用対応文（${esc(i.adoptedLabel || "")}）</summary>
             <p>${esc(i.finalReply).replace(/\n/g, "<br>")}</p></details>`
         : ""}
       <small>${esc(i.createdAt)}</small>
