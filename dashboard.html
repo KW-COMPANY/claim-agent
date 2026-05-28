@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ダッシュボード</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>ダッシュボード</h1>
+    <nav>
+      <a href="index.html">入力・分析</a>
+      <a href="list.html">案件一覧・ナレッジ</a>
+      <a href="dashboard.html" class="active">ダッシュボード</a>
+    </nav>
+    <div class="token-area">
+      <input type="password" id="token" placeholder="アクセストークン" />
+      <button id="saveToken">保存</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <button id="loadBtn" class="primary">集計を読み込み</button>
+      <p><strong>総件数:</strong> <span id="total">-</span></p>
+      <div class="grid2">
+        <div><h3>カテゴリ別</h3><div id="byCategory"></div></div>
+        <div><h3>重要度別</h3><div id="bySeverity"></div></div>
+        <div><h3>緊急度別</h3><div id="byUrgency"></div></div>
+        <div><h3>顧客感情別</h3><div id="bySentiment"></div></div>
+        <div><h3>頻出キーワード TOP10</h3><div id="keywords"></div></div>
+        <div><h3>月別件数</h3><div id="monthly"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
