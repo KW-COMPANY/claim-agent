@@ -1,0 +1,86 @@
+<!-- File: index.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ご意見BOX AIト</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>営業フィードバック分析エージェント</h1>
+    <nav>
+      <a href="index.html" class="active">入力・分析</a>
+      <a href="list.html">案件一覧・ナレッジ</a>
+      <a href="dashboard.html">ダッシュボード</a>
+    </nav>
+    <div class="token-area">
+      <input type="password" id="token" placeholder="アクセストークン" />
+      <button id="saveToken">保存</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>1. お客様からのご意見を入力</h2>
+      <div class="grid2">
+        <label>顧客名・社名
+          <input type="text" id="customer" placeholder="例: 株式会社○○" />
+        </label>
+        <label>案件・商材
+          <input type="text" id="deal" placeholder="例: ○○システム導入案件" />
+        </label>
+        <label>受領チャネル
+          <select id="channel">
+            <option value="">選択してください</option>
+            <option>電話</option><option>メール</option>
+            <option>対面商談</option><option>Web会議</option>
+            <option>チャット</option><option>その他</option>
+          </select>
+        </label>
+        <label>入力者（営業担当）
+          <input type="text" id="operator" placeholder="例: 山田" />
+        </label>
+      </div>
+      <label>顧客の発言・状況 <span class="required">必須</span>
+        <textarea id="text" rows="7" maxlength="3000"
+          placeholder="顧客の発言内容、背景、経緯を具体的に記入"></textarea>
+      </label>
+      <button id="analyzeBtn" class="primary">AI分析を実行</button>
+      <div id="loading" class="hidden">分析中…（15〜25秒）</div>
+    </section>
+
+    <section id="result" class="card hidden">
+      <h2>2. AI分析結果</h2>
+      <div id="analysisArea"></div>
+
+      <h3>3. 対応案（3パターン）</h3>
+      <div id="proposalsArea"></div>
+
+      <h3>4. 推奨される社内アクション</h3>
+      <ul id="actionsArea"></ul>
+
+      <h3>5. 参考にした過去ナレッジ</h3>
+      <div id="knowledgeArea"></div>
+
+      <h3>6. 採用案の確定・編集</h3>
+      <label>採用する対応文（編集可）
+        <textarea id="finalReply" rows="8"></textarea>
+      </label>
+      <label>採用した案
+        <select id="adoptedLabel">
+          <option value="">選択</option>
+          <option value="A案">A案</option>
+          <option value="B案">B案</option>
+          <option value="C案">C案</option>
+          <option value="カスタム">カスタム（編集）</option>
+        </select>
+      </label>
+      <button id="finalizeBtn" class="primary">ナレッジとして確定保存</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
