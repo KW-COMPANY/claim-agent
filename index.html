@@ -1,10 +1,9 @@
-<!-- File: index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ご意見BOX AIト</title>
+  <title>営業フィードバック分析エージェント</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -22,14 +21,28 @@
   </header>
 
   <main class="container">
+    <section class="card notice">
+      <strong>⚠ 入力時の重要ルール</strong>
+      <ul>
+        <li>顧客名・社名・担当者氏名・電話番号・メールアドレス等は<strong>入力禁止</strong></li>
+        <li>具体的な商品名・サービス名は入力しない（カテゴリで選択）</li>
+        <li>「3か月前の運用開始以降、想定したCVが出ていない」のように<strong>事実のみ匿名で</strong>記述してください</li>
+      </ul>
+    </section>
+
     <section class="card">
-      <h2>1. お客様からのご意見を入力</h2>
+      <h2>1. 案件属性を入力</h2>
       <div class="grid2">
-        <label>顧客名・社名
-          <input type="text" id="customer" placeholder="例: 株式会社○○" />
-        </label>
-        <label>案件・商材
-          <input type="text" id="deal" placeholder="例: ○○システム導入案件" />
+        <label>商材カテゴリ
+          <select id="productCategory">
+            <option value="">選択してください</option>
+            <option>広告</option>
+            <option>SEO</option>
+            <option>MEO</option>
+            <option>SNS</option>
+            <option>保守</option>
+            <option>その他</option>
+          </select>
         </label>
         <label>受領チャネル
           <select id="channel">
@@ -39,48 +52,92 @@
             <option>チャット</option><option>その他</option>
           </select>
         </label>
-        <label>入力者（営業担当）
-          <input type="text" id="operator" placeholder="例: 山田" />
+        <label>取引年数（顧客年次）
+          <select id="tenure">
+            <option value="">選択してください</option>
+            <option>1年未満</option>
+            <option>1〜2年</option>
+            <option>3〜5年</option>
+            <option>6〜10年</option>
+            <option>10年以上</option>
+          </select>
+        </label>
+        <label>クレーム回数（同一顧客から）
+          <select id="claimCount">
+            <option value="">選択してください</option>
+            <option>初回</option>
+            <option>2回目</option>
+            <option>3回目</option>
+            <option>4回以上</option>
+          </select>
+        </label>
+        <label>現在の契約・購入金額レンジ
+          <select id="currentAmount">
+            <option value="">選択してください</option>
+            <option>〜10万円</option>
+            <option>10〜30万円</option>
+            <option>30〜50万円</option>
+            <option>50〜100万円</option>
+            <option>100〜300万円</option>
+          </select>
+        </label>
+        <label>これまでのご利用累計金額レンジ
+          <select id="totalAmount">
+            <option value="">選択してください</option>
+            <option>〜100万円</option>
+            <option>100〜500万円</option>
+            <option>500〜1,000万円</option>
+            <option>1,000〜5,000万円</option>
+            <option>5,000万円〜</option>
+          </select>
         </label>
       </div>
-      <label>顧客の発言・状況 <span class="required">必須</span>
-        <textarea id="text" rows="7" maxlength="3000"
-          placeholder="顧客の発言内容、背景、経緯を具体的に記入"></textarea>
-      </label>
-      <button id="analyzeBtn" class="primary">AI分析を実行</button>
+
+      <h2>2. 顧客の発言・状況（匿名） <span class="required">必須</span></h2>
+      <textarea id="text" rows="7" maxlength="3000"
+        placeholder="例：運用開始3か月だが想定したCV数に届かず、改善提案も具体性に欠けるとの指摘。レス遅延の不満も併発。"></textarea>
+      <div id="piiWarn" class="pii-warn hidden"></div>
+
+      <button id="analyzeBtn" class="primary" disabled>AI分析を実行</button>
       <div id="loading" class="hidden">分析中…（15〜25秒）</div>
     </section>
 
     <section id="result" class="card hidden">
-      <h2>2. AI分析結果</h2>
+      <h2>3. AI分析結果</h2>
       <div id="analysisArea"></div>
 
-      <h3>3. 対応案（3パターン）</h3>
+      <h3>4. 対応案（AIが選定した3つの対応型）</h3>
       <div id="proposalsArea"></div>
 
-      <h3>4. 推奨される社内アクション</h3>
+      <h3>5. 推奨される社内アクション</h3>
       <ul id="actionsArea"></ul>
 
-      <h3>5. 参考にした過去ナレッジ</h3>
+      <h3>6. 参考にした過去ナレッジ</h3>
       <div id="knowledgeArea"></div>
 
-      <h3>6. 採用案の確定・編集</h3>
-      <label>採用する対応文（編集可）
+      <h3>7. 採用案の確定・編集</h3>
+      <label>採用する対応文（編集可・固有名詞禁止）
         <textarea id="finalReply" rows="8"></textarea>
       </label>
-      <label>採用した案
+      <div id="finalPiiWarn" class="pii-warn hidden"></div>
+      <label>採用した対応型
         <select id="adoptedLabel">
           <option value="">選択</option>
-          <option value="A案">A案</option>
-          <option value="B案">B案</option>
-          <option value="C案">C案</option>
-          <option value="カスタム">カスタム（編集）</option>
+          <option>即時謝罪型</option>
+          <option>原因説明型</option>
+          <option>改善プラン提示型</option>
+          <option>施策修正提案型</option>
+          <option>追加サービス提案型</option>
+          <option>契約条件見直し型</option>
+          <option>エスカレーション型</option>
+          <option>カスタム</option>
         </select>
       </label>
       <button id="finalizeBtn" class="primary">ナレッジとして確定保存</button>
     </section>
   </main>
 
+  <script src="pii.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
