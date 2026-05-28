@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>案件一覧 / ナレッジ</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>案件一覧・ナレッジ</h1>
+    <nav>
+      <a href="index.html">入力・分析</a>
+      <a href="list.html" class="active">案件一覧・ナレッジ</a>
+      <a href="dashboard.html">ダッシュボード</a>
+    </nav>
+    <div class="token-area">
+      <input type="password" id="token" placeholder="アクセストークン" />
+      <button id="saveToken">保存</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="filters">
+        <select id="kind">
+          <option value="all">すべて</option>
+          <option value="draft">下書きのみ</option>
+          <option value="knowledge">確定ナレッジのみ</option>
+        </select>
+        <select id="fCategory">
+          <option value="">全カテゴリ</option>
+          <option>製品品質</option><option>納期</option>
+          <option>価格</option><option>担当者対応</option>
+          <option>契約条件</option><option>サポート</option><option>その他</option>
+        </select>
+        <select id="fSeverity">
+          <option value="">全重要度</option>
+          <option>高</option><option>中</option><option>低</option>
+        </select>
+        <select id="fUrgency">
+          <option value="">全緊急度</option>
+          <option>緊急</option><option>通常</option><option>低</option>
+        </select>
+        <input type="text" id="fKeyword" placeholder="キーワード検索" />
+        <button id="loadBtn" class="primary">読み込み</button>
+      </div>
+    </section>
+
+    <section id="listArea"></section>
+  </main>
+
+  <script src="list.js"></script>
+</body>
+</html>
