@@ -1,3 +1,4 @@
+// File: list.js
 const API_BASE = "https://claim-agent.gmo-k-watanabe.workers.dev";
 
 const tokenInput = document.getElementById("token");
@@ -28,21 +29,22 @@ async function load() {
 
 function render() {
   const fcc = document.getElementById("fClaimCategory").value;
-  const fp = document.getElementById("fProduct").value;
-  const fa = document.getElementById("fAdoptedType").value;
-  const fs = document.getElementById("fSeverity").value;
-  const fu = document.getElementById("fUrgency").value;
-  const fk = document.getElementById("fKeyword").value.trim().toLowerCase();
+  const fp  = document.getElementById("fProduct").value;
+  const fa  = document.getElementById("fAdoptedType").value;
+  const fs  = document.getElementById("fSeverity").value;
+  const fu  = document.getElementById("fUrgency").value;
+  const fk  = document.getElementById("fKeyword").value.trim().toLowerCase();
 
   const items = cache.filter((i) => {
     const a = i.analysis || {};
     if (fcc && a.claim_category !== fcc) return false;
-    if (fp && i.productCategory !== fp) return false;
-    if (fa && i.adoptedLabel !== fa) return false;
-    if (fs && a.severity !== fs) return false;
-    if (fu && a.urgency !== fu) return false;
+    if (fp  && i.productCategory !== fp)  return false;
+    if (fa  && i.adoptedLabel    !== fa)  return false;
+    if (fs  && a.severity        !== fs)  return false;
+    if (fu  && a.urgency         !== fu)  return false;
     if (fk) {
-      const blob = [i.text, a.summary, (a.keywords || []).join(" "), i.finalReply].join(" ").toLowerCase();
+      const blob = [i.text, a.summary, (a.keywords || []).join(" "), i.finalReply]
+        .join(" ").toLowerCase();
       if (!blob.includes(fk)) return false;
     }
     return true;
@@ -51,12 +53,12 @@ function render() {
   const area = document.getElementById("listArea");
   area.innerHTML = items.length
     ? items.map(renderItem).join("")
-    : "<p style='padding:20px;text-align:center;color:#888;'>該当なし</p>";
+    : "<p class='empty-state'>該当する案件がありません</p>";
 
   area.querySelectorAll(".del-btn").forEach((b) =>
     b.addEventListener("click", async (e) => {
       if (!confirm("削除しますか？")) return;
-      const id = e.target.dataset.id;
+      const id   = e.target.dataset.id;
       const kind = e.target.dataset.kind;
       await fetch(`${API_BASE}/api/delete`, {
         method: "POST",
@@ -69,7 +71,7 @@ function render() {
 }
 
 function renderItem(i) {
-  const a = i.analysis || {};
+  const a   = i.analysis || {};
   const isK = i.type === "knowledge";
   return `
     <div class="item">
@@ -86,11 +88,11 @@ function renderItem(i) {
       </p>
       <p>
         <small>
-          商材: ${esc(i.productCategory || "-")} / 
-          取引: ${esc(i.tenure || "-")} / 
-          クレーム回数: ${esc(i.claimCount || "-")} / 
-          現契約: ${esc(i.currentAmount || "-")} / 
-          累計: ${esc(i.totalAmount || "-")} / 
+          商材: ${esc(i.productCategory || "-")} /
+          取引: ${esc(i.tenure || "-")} /
+          クレーム回数: ${esc(i.claimCount || "-")} /
+          現契約: ${esc(i.currentAmount || "-")} /
+          累計: ${esc(i.totalAmount || "-")} /
           チャネル: ${esc(i.channel || "-")}
         </small>
       </p>
@@ -99,12 +101,13 @@ function renderItem(i) {
         <p>${esc(i.text)}</p>
       </details>
       ${isK
-        ? `<details open><summary>採用対応文（${esc(i.adoptedLabel || "")}）</summary>
-            <p>${esc(i.finalReply).replace(/\n/g, "<br>")}</p></details>`
+        ? `<details open>
+             <summary>採用対応文（${esc(i.adoptedLabel || "")}）</summary>
+             <p>${esc(i.finalReply).replace(/\n/g, "<br>")}</p>
+           </details>`
         : ""}
       <small>${esc(i.createdAt)}</small>
-      <button class="del-btn" data-id="${esc(i.id)}" data-kind="${isK ? "knowledge" : "draft"}"
-        style="float:right;background:#dc2626;">削除</button>
+      <button class="del-btn" data-id="${esc(i.id)}" data-kind="${isK ? "knowledge" : "draft"}">削除</button>
     </div>`;
 }
 
