@@ -1,3 +1,5 @@
+<!-- Output: html -->
+<!-- File: dashboard.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -23,8 +25,8 @@
   <main class="container">
     <section class="card">
       <button id="loadBtn" class="primary">集計を読み込み</button>
-      <p><strong>総件数:</strong> <span id="total">-</span></p>
-      <div class="grid2">
+      <p class="dashboard-total"><strong>総件数:</strong> <span id="total">-</span></p>
+      <div class="grid2" style="margin-top:20px;">
         <div><h3>クレーム種別</h3><div id="byClaimCategory"></div></div>
         <div><h3>商材カテゴリ別</h3><div id="byProductCategory"></div></div>
         <div><h3>採用された対応型</h3><div id="byAdoptedType"></div></div>
