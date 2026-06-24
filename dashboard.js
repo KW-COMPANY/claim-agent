@@ -1,3 +1,4 @@
+// File: dashboard.js
 const API_BASE = "https://claim-agent.gmo-k-watanabe.workers.dev";
 
 const tokenInput = document.getElementById("token");
@@ -34,14 +35,14 @@ document.getElementById("loadBtn").addEventListener("click", async () => {
 
 function bars(obj) {
   const entries = Object.entries(obj || {});
-  if (!entries.length) return "<p style='color:#888;'>データなし</p>";
+  if (!entries.length) return "<p class='no-data'>データなし</p>";
   const max = Math.max(...entries.map(([, v]) => v));
   return entries
     .sort((a, b) => b[1] - a[1])
     .map(([k, v]) => `
       <div class="bar-row">
         <span class="label">${esc(k)}</span>
-        <div class="bar" style="width:${(v / max) * 70}%">${v}</div>
+        <div class="bar" style="width:${Math.max((v / max) * 70, 4)}%">${v}</div>
       </div>`).join("");
 }
 
