@@ -1,4 +1,3 @@
-// File: list.js
 const API_BASE = "https://claim-agent.gmo-k-watanabe.workers.dev";
 
 const tokenInput = document.getElementById("token");
