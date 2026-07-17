@@ -1,12 +1,27 @@
+// File: app.js
 const API_BASE = "https://claim-agent.gmo-k-watanabe.workers.dev";
 
 const tokenInput = document.getElementById("token");
 tokenInput.value = localStorage.getItem("accessToken") || "";
 document.getElementById("saveToken").addEventListener("click", () => {
   localStorage.setItem("accessToken", tokenInput.value);
-  alert("トークンを保存しました");
+  showToast("トークンを保存しました");
 });
 const getToken = () => tokenInput.value || localStorage.getItem("accessToken") || "";
+
+/* トースト通知（既存のalertは重要局面では残す） */
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  if (!t) return alert(msg);
+  t.textContent = msg;
+  t.classList.remove("hidden");
+  t.classList.add("show");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => {
+    t.classList.remove("show");
+    t.classList.add("hidden");
+  }, 2200);
+}
 
 const textArea = document.getElementById("text");
 const piiWarn = document.getElementById("piiWarn");
@@ -43,6 +58,27 @@ finalReply.addEventListener("input", () => {
     finalPiiWarn.classList.add("hidden");
   }
 });
+
+/* AI案の品質評価（★1〜5）: Closed Loop の Evaluate 入力 */
+let currentRating = 0;
+const ratingStars = document.getElementById("ratingStars");
+const ratingHint = document.getElementById("ratingHint");
+function paintStars(v) {
+  if (!ratingStars) return;
+  ratingStars.querySelectorAll(".star").forEach((s) => {
+    s.classList.toggle("on", Number(s.dataset.v) <= v);
+  });
+  const labels = { 1: "大きく修正が必要", 2: "やや不十分", 3: "普通", 4: "良い", 5: "そのまま使える" };
+  if (ratingHint) ratingHint.textContent = v ? `${v} / 5（${labels[v]}）` : "未評価";
+}
+if (ratingStars) {
+  ratingStars.querySelectorAll(".star").forEach((s) => {
+    s.addEventListener("click", () => {
+      currentRating = Number(s.dataset.v);
+      paintStars(currentRating);
+    });
+  });
+}
 
 let currentDraft = null;
 
@@ -86,6 +122,8 @@ analyzeBtn.addEventListener("click", async () => {
       return;
     }
     currentDraft = data;
+    currentRating = 0;
+    paintStars(0);
     renderResult(data);
   } catch (e) {
     alert("通信エラー: " + e.message);
@@ -118,6 +156,7 @@ function renderResult(d) {
       <div class="proposal">
         <h4><span class="tag tag-type">${esc(p.response_type)}</span>
           <button class="copy-btn" data-i="${i}">この型を採用</button>
+          <button class="clip-btn" data-i="${i}">コピー</button>
         </h4>
         <div>${esc(p.content).replace(/\n/g, "<br>")}</div>
         <div class="pc">
@@ -132,6 +171,20 @@ function renderResult(d) {
       finalReply.value = d.proposals[i].content;
       finalReply.dispatchEvent(new Event("input"));
       document.getElementById("adoptedLabel").value = d.proposals[i].response_type;
+      showToast("採用文にセットしました");
+    })
+  );
+
+  // クリップボードへコピー（利便性向上）
+  document.querySelectorAll(".clip-btn").forEach((b) =>
+    b.addEventListener("click", async (e) => {
+      const i = +e.target.dataset.i;
+      try {
+        await navigator.clipboard.writeText(d.proposals[i].content);
+        showToast("クリップボードにコピーしました");
+      } catch {
+        alert("コピーに失敗しました。手動で選択してください。");
+      }
     })
   );
 
@@ -170,12 +223,18 @@ document.getElementById("finalizeBtn").addEventListener("click", async () => {
       finalReply: reply,
       adoptedLabel: document.getElementById("adoptedLabel").value,
       status: "確定",
+      rating: currentRating || null,
     }),
   });
   const d = await res.json();
   if (res.ok) {
-    alert("ナレッジとして保存しました");
+    const rateMsg = (typeof d.editRate === "number")
+      ? `（AI案からの修正率: ${Math.round(d.editRate * 100)}%）`
+      : "";
+    showToast("ナレッジとして保存しました " + rateMsg);
     currentDraft = null;
+    currentRating = 0;
+    paintStars(0);
     document.getElementById("result").classList.add("hidden");
     textArea.value = "";
     analyzeBtn.disabled = true;
