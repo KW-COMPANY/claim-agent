@@ -1,3 +1,5 @@
+<!-- Output: html -->
+<!-- File: dashboard.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -24,10 +26,30 @@
     <section class="card">
       <button id="loadBtn" class="primary">集計を読み込み</button>
       <p class="dashboard-total"><strong>総件数:</strong> <span id="total">-</span></p>
+
+      <div class="loop-metrics" style="margin-top:16px;">
+        <div class="metric-card">
+          <div class="metric-label">確定ナレッジ数</div>
+          <div class="metric-value" id="mKnowledge">-</div>
+          <div class="metric-sub">蓄積が増えるほどAIが賢くなります</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">平均満足度（★5段階）</div>
+          <div class="metric-value" id="mRating">-</div>
+          <div class="metric-sub">高いほどAI案がそのまま使えている</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">平均修正率</div>
+          <div class="metric-value" id="mEdit">-</div>
+          <div class="metric-sub">低いほどAI案の完成度が高い</div>
+        </div>
+      </div>
+
       <div class="grid2" style="margin-top:20px;">
         <div><h3>クレーム種別</h3><div id="byClaimCategory"></div></div>
         <div><h3>商材カテゴリ別</h3><div id="byProductCategory"></div></div>
         <div><h3>採用された対応型</h3><div id="byAdoptedType"></div></div>
+        <div><h3>成果（顧客反応）別</h3><div id="byOutcome"></div></div>
         <div><h3>重要度別</h3><div id="bySeverity"></div></div>
         <div><h3>緊急度別</h3><div id="byUrgency"></div></div>
         <div><h3>顧客感情別</h3><div id="bySentiment"></div></div>
