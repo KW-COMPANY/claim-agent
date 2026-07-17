@@ -1,4 +1,3 @@
-// File: dashboard.js
 const API_BASE = "https://claim-agent.gmo-k-watanabe.workers.dev";
 
 const tokenInput = document.getElementById("token");
@@ -32,7 +31,7 @@ document.getElementById("loadBtn").addEventListener("click", async () => {
     .reduce((o, [k, v]) => ((o[k] = v), o), {});
   document.getElementById("keywords").innerHTML = bars(kw);
 
-  // ▼Closed Loop 指標の描画
+  // 指標の描画
   const loop = d.loop || {};
   document.getElementById("mKnowledge").textContent =
     (loop.knowledgeCount ?? 0) + " 件";
