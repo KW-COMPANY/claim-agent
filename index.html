@@ -1,3 +1,5 @@
+<!-- Output: html -->
+<!-- File: index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -136,9 +138,23 @@
           <option>カスタム</option>
         </select>
       </label>
+
+      <label>AI案の品質評価（学習に活用されます）
+        <div id="ratingStars" class="rating-stars" role="radiogroup" aria-label="AI案の品質評価">
+          <button type="button" class="star" data-v="1" aria-label="1点">★</button>
+          <button type="button" class="star" data-v="2" aria-label="2点">★</button>
+          <button type="button" class="star" data-v="3" aria-label="3点">★</button>
+          <button type="button" class="star" data-v="4" aria-label="4点">★</button>
+          <button type="button" class="star" data-v="5" aria-label="5点">★</button>
+          <span id="ratingHint" class="rating-hint">未評価</span>
+        </div>
+      </label>
+
       <button id="finalizeBtn" class="primary">ナレッジとして確定保存</button>
     </section>
   </main>
+
+  <div id="toast" class="toast hidden"></div>
 
   <script src="pii.js"></script>
   <script src="app.js"></script>
