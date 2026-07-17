@@ -1,3 +1,4 @@
+// File: dashboard.js
 const API_BASE = "https://claim-agent.gmo-k-watanabe.workers.dev";
 
 const tokenInput = document.getElementById("token");
@@ -30,6 +31,18 @@ document.getElementById("loadBtn").addEventListener("click", async () => {
     .slice(0, 10)
     .reduce((o, [k, v]) => ((o[k] = v), o), {});
   document.getElementById("keywords").innerHTML = bars(kw);
+
+  // ▼Closed Loop 指標の描画
+  const loop = d.loop || {};
+  document.getElementById("mKnowledge").textContent =
+    (loop.knowledgeCount ?? 0) + " 件";
+  document.getElementById("mRating").textContent =
+    (loop.avgRating != null ? loop.avgRating + " / 5" : "未評価");
+  document.getElementById("mEdit").textContent =
+    (loop.avgEditRate != null ? Math.round(loop.avgEditRate * 100) + " %" : "-");
+
+  const outEl = document.getElementById("byOutcome");
+  if (outEl) outEl.innerHTML = bars(loop.byOutcome);
 });
 
 function bars(obj) {
